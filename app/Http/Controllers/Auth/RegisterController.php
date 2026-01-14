@@ -20,5 +20,7 @@ class RegisterController extends Controller
             ...$request->validated(),
             'password' => Hash::make($request->password),
         ]);
+
+        //auth()->login($user);
     }
 }
