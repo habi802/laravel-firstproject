@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\RegisterRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
@@ -13,12 +14,11 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users|max:255',
-            'password' => [Password::defaults()]
+        $user = User::create([
+            ...$request->validated(),
+            'password' => Hash::make($request->password),
         ]);
     }
 }
