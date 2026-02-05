@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -21,6 +22,12 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        //auth()->login($user);
+        // 로그인
+        auth()->login($user);
+
+        // 이메일 인증
+        event(new Registered($user));
+      
+        return to_route('verification.notice');
     }
 }
