@@ -17,7 +17,7 @@ class EmailVerificationController extends Controller
     {
         $request->fulfill();
 
-        return redirect()->to(RouteServiceProvider::HOME);
+        return redirect('/');
     }
 
     public function send(Request $request)
