@@ -24,6 +24,7 @@ class RegisterControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    // 회원 가입 뷰 테스트
     public function testReturnsRegisterView()
     {
         $this->get(route('register'))
@@ -31,6 +32,7 @@ class RegisterControllerTest extends TestCase
              ->assertViewIs('auth.register');
     }
 
+    // 회원 등록 테스트
     public function testUserRegisteration()
     {
         Event::fake();
