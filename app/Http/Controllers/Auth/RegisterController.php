@@ -7,12 +7,15 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use App\Enums\Provider;
 
 class RegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('auth.register', [
+            'providers' => Provider::cases(),
+        ]);
     }
 
     public function register(RegisterRequest $request)
