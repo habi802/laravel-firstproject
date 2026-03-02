@@ -31,12 +31,12 @@
                             Dashboard
                         </a> --}}
                     @else
-                        {{-- <a
+                        <a
                             href="{{ route('login') }}"
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
                         >
                             Log in
-                        </a> --}}
+                        </a>
 
                         @if (Route::has('register'))
                             <a
@@ -117,6 +117,11 @@
                             </a>
                         </li>
                     </ul>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        
+                        <button type="submit">로그아웃</button>
+                    </form>
                 </div>
                 <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">
                     {{-- Laravel Logo --}}

@@ -5,4 +5,5 @@ return [
     App\Providers\PasswordServiceProvider::class,
     App\Providers\SessionServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
+    SocialiteProviders\Manager\ServiceProvider::class,
 ];
