@@ -9,8 +9,6 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
-        <main>@yield('content')</main>
-
         @if ($errors->any())
             @foreach ($errors->all() as $error)
                 <ul>
@@ -18,5 +16,11 @@
                 </ul>
             @endforeach        
         @endif
+
+        @if (session()->has('status'))
+            <div>{{ session()->get('status') }}</div>
+        @endif
+
+        <main>@yield('content')</main>
     </body>
 </html>
