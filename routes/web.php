@@ -66,3 +66,12 @@ Route::controller(\App\Http\Controllers\Auth\PasswordResetController::class)->gr
              ->name('update');
     });
 });
+
+// 비밀번호 확인
+Route::controller(\App\Http\Controllers\Auth\PasswordConfirmController::class)->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::get('/confirm-password', 'showPasswordConfirmationForm')
+             ->name('password.confirm');
+        Route::post('/confirm-password', 'confirm');
+    });
+});
