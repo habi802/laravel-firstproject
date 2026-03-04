@@ -69,7 +69,7 @@ Route::controller(\App\Http\Controllers\Auth\PasswordResetController::class)->gr
 
 // 비밀번호 확인
 Route::controller(\App\Http\Controllers\Auth\PasswordConfirmController::class)->group(function () {
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'password.confirm'])->group(function () {
         Route::get('/confirm-password', 'showPasswordConfirmationForm')
              ->name('password.confirm');
         Route::post('/confirm-password', 'confirm');
