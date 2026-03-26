@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as ResettablePassword;
+use App\Models\Blog;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -46,5 +47,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class);
     }
 }

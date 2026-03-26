@@ -79,3 +79,6 @@ Route::controller(\App\Http\Controllers\Auth\PasswordConfirmController::class)->
 // 마이페이지
 Route::singleton('profile', \App\Http\Controllers\Auth\ProfileController::class)
 	->middleware('password.confirm');
+
+// 블로그
+Route::resource('blogs', \App\Http\Controllers\BlogController::class);
