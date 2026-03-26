@@ -43,7 +43,9 @@ class BlogController extends Controller
      */
     public function show(Blog $blog)
     {
-        //
+        return view('blogs.show', [
+            'blog' => $blog
+        ]);
     }
 
     /**
@@ -51,7 +53,9 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        //
+        return view('blogs.edit', [
+            'blog' => $blog
+        ]);
     }
 
     /**
@@ -59,7 +63,9 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        //
+        $blog->update($request->validated());
+
+        return to_route('dashboard.blogs');
     }
 
     /**
@@ -67,6 +73,8 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        //
+        $blog->delete();
+
+        return to_route('dashboard.blogs');
     }
 }
