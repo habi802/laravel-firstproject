@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
+//use Illuminate\Support\Facades\Gate;
 
 class BlogController extends Controller
 {
@@ -53,6 +54,12 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
+        // if (!Gate::allows('update-blog', $blog)) {
+        //     abort(403);
+        // }
+        
+        //Gate::authorize('update-blog', $blog);
+
         return view('blogs.edit', [
             'blog' => $blog
         ]);

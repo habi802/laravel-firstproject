@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Event;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use SocialiteProviders\Kakao\KakaoExtendSocialite;
 use SocialiteProviders\Naver\NaverExtendSocialite;
+// use Illuminate\Support\Facades\Gate;
+// use App\Models\User;
+// use App\Models\Blog;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +35,15 @@ class AppServiceProvider extends ServiceProvider
             SocialiteWasCalled::class,
             NaverExtendSocialite::class
         );
+
+        // Gate::before(function (User $user, string $ability) {
+        //     if ($user->isAdministrator()) {
+        //         return true;
+        //     }
+        // });
+    
+        // Gate::define('update-blog', function (User $user, Blog $blog) {
+        //     return $user->id === $blog->user_id;
+        // });
     }
 }
