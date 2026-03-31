@@ -82,3 +82,11 @@ Route::singleton('profile', \App\Http\Controllers\Auth\ProfileController::class)
 
 // 블로그
 Route::resource('blogs', \App\Http\Controllers\BlogController::class);
+
+// 구독
+Route::controller(\App\Http\Controllers\SubscribeController::class)->group(function () {
+    Route::post('subscribe', 'subscribe')
+         ->name('subscribe');
+    Route::post('unsubscribe', 'unsubscribe')
+         ->name('unsubscribe');
+});

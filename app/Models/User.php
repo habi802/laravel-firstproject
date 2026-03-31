@@ -53,4 +53,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->hasMany(Blog::class);
     }
+
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Blog::class)
+                    ->as('subscription');
+    }
 }

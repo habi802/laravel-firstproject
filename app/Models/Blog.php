@@ -24,4 +24,10 @@ class Blog extends Model
     {
         return 'name';
     }
+
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class)
+                    ->as('subscription');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
 use App\Models\Blog;
@@ -42,10 +43,14 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    public function show(Request $request, Blog $blog)
     {
+        $user = $request->user();
+
         return view('blogs.show', [
-            'blog' => $blog
+            'blog' => $blog,
+            'owned' => $user->blogs()->find($blog->id),
+            'subscribed' => $blog->subscribers()->find($user->id)
         ]);
     }
 
