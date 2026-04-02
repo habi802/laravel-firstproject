@@ -18,7 +18,7 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'blog_id' => Blogg::factory(),
+            'blog_id' => Blog::factory(),
             'title' => fake()->text(50),
             'content' => fake()->text,
         ];
