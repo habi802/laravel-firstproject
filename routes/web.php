@@ -90,3 +90,6 @@ Route::controller(\App\Http\Controllers\SubscribeController::class)->group(funct
     Route::post('unsubscribe', 'unsubscribe')
          ->name('unsubscribe');
 });
+
+// 블로그 글
+Route::resource('blogs.posts', \App\Http\Controllers\PostController::class)->shallow();

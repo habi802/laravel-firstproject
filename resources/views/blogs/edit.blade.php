@@ -3,20 +3,41 @@
 @section('title', '블로그 관리')
 
 @section('content')
-    <form action="{{ route('blogs.update', $blog) }}" method="POST">
-        @method('PUT')
-        @csrf
+    <div>
+        <form action="{{ route('blogs.update', $blog) }}" method="POST">
+            @method('PUT')
+            @csrf
+    
+            <input type="text" id="name" name="name" value="{{ $blog->name }}">
+            <input type="text" id="display_name" name="display_name" value="{{ $blog->display_name }}">
+    
+            <button type="submit">이름 바꾸기</button>
+        </form>
+    
+        <form action="{{ route('blogs.destroy', $blog) }}" method="POST">
+            @method('DELETE')
+            @csrf
+            
+            <button type="submit">삭제</button>
+        </form>
+    </div>
 
-        <input type="text" id="name" name="name" value="{{ $blog->name }}">
-        <input type="text" id="display_name" name="display_name" value="{{ $blog->display_name }}">
+    <div>
+        <h3>글</h3>
 
-        <button type="submit">이름 바꾸기</button>
-    </form>
+        <ul>
+            @foreach($blog->posts as $post)
+                <li>
+                    <a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a>
+                    <a href="{{ route('posts.edit', $post) }}">수정</a>
+                    <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
 
-    <form action="{{ route('blogs.destroy', $blog) }}" method="POST">
-        @method('DELETE')
-        @csrf
-        
-        <button type="submit">삭제</button>
-    </form>
+                        <button type="submit">삭제</button>
+                    </form>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 @endsection
