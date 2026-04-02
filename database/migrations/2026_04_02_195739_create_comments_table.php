@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\User::class)
+                  ->constrained()
+                  ->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Comment::class, 'parent_id')
+                  ->nullable()
+                  ->constarined('comments')
+                  ->cascadeOnDelete();
+            $table->morphs('commentable');
+            $table->text('content');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
