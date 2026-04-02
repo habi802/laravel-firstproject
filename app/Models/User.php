@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as ResettablePassword;
 use App\Models\Blog;
+use App\Models\Comment;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -58,5 +59,10 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->belongsToMany(Blog::class)
                     ->as('subscription');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
