@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use App\Models\Blog;
 
 class PostPolicy
 {
@@ -13,7 +14,7 @@ class PostPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,15 +22,15 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Blog $blog): bool
     {
-        return false;
+        return $user->id === $blog->user_id;
     }
 
     /**
@@ -37,7 +38,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return false;
+        return $user->id === $post->blog->user_id;
     }
 
     /**
@@ -45,7 +46,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return false;
+        return $user->id === $post->blog->user_id;
     }
 
     /**
