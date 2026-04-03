@@ -29,7 +29,7 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): bool
     {
-        return false;
+        return $user->id === $comment->user_id;
     }
 
     /**
@@ -45,7 +45,9 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        return false;
+        // 댓글 작성자이거나 블로그의 소유자인 경우 삭제 허용
+        return ($user->id === $comment->user_id)
+            || ($user->id === $comment->commentable->blog->user_id);
     }
 
     /**
