@@ -46,8 +46,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        // Model::loadCount()를 사용하여 뷰에서 $post->comments_count를 사용하여 댓글의 개수를 출력할 수 있음
+        // QueriesRelationships::doesntHave('parent')를 사용하여 부모가 설정되지 않은, 최상위 댓글만을 가져온 뒤,
+        // with()를 사용하여 댓글 작성자, 대댓글, 대댓글 작성자까지 가져옴
         return view('blogs.posts.show', [
-            'post' => $post
+            'post' => $post->loadCount('comments'),
+            'comments' => $post->comments()
+                               ->doesntHave('parent')
+                               ->with(['user', 'replies.user'])
+                               ->get()
         ]);
     }
 

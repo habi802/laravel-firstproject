@@ -93,3 +93,8 @@ Route::controller(\App\Http\Controllers\SubscribeController::class)->group(funct
 
 // 블로그 글
 Route::resource('blogs.posts', \App\Http\Controllers\PostController::class)->shallow();
+
+// 댓글
+Route::resource('posts.comments', \App\Http\Controllers\CommentController::class)
+     ->shallow()
+     ->only(['store', 'update', 'destroy']);
