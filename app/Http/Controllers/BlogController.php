@@ -67,7 +67,10 @@ class BlogController extends Controller
         //Gate::authorize('update-blog', $blog);
 
         return view('blogs.edit', [
-            'blog' => $blog
+            'blog' => $blog->load([
+                'comments.user',
+                'comments.commentable'
+            ])
         ]);
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\Comment;
 
 class Blog extends Model
 {
@@ -35,5 +36,11 @@ class Blog extends Model
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasManyThrough(Comment::class, Post::class, secondKey: 'commentable_id')
+                    ->where('commentable_type', Post::class);
     }
 }
