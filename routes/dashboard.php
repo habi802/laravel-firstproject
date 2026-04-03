@@ -9,3 +9,7 @@ Route::get('/subscribers', \App\Http\Controllers\Dashboard\SubscriberController:
      ->name('dashboard.subscribers');
 Route::get('/subscriptions', \App\Http\Controllers\Dashboard\SubscriptionController::class)
      ->name('dashboard.subscriptions');
+
+// 댓글
+Route::get('/comments', \App\Http\Controllers\Dashboard\CommentController::class)
+     ->name('dashboard.comments');
