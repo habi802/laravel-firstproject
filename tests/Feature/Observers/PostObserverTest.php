@@ -1,0 +1,25 @@
+<?php
+
+namespace Tests\Feature\Observers;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use App\Models\Post;
+use App\Observers\PostObserver;
+
+class PostObserverTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function testDeletingAssociatedCommentsOnPostDeletion()
+    {
+        $post = Post::factory()->hasComments()->create();
+
+        $observer = new PostObserver();
+
+        $observer->deleted($post);
+
+        $this->assertCount(0, $post->comments);
+    }
+}
