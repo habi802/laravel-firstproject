@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Facades\Storage;
 
 class Attachment extends Model
 {
@@ -18,5 +20,26 @@ class Attachment extends Model
     public function post()
     {
         return $this->belongsTo(Post::class);
+    }
+
+    public function external()
+    {
+        return Attribute::make(
+            get: fn () => preg_match('/^https?/', $this->name)
+        );
+    }
+
+    public function link()
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $path = $this->external
+                      ? $this->name
+                      : Storage::disk('public')->url($this->name);
+
+                return $value ?? $path;
+            },
+            set: fn ($value) => $value
+        );
     }
 }
