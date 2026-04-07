@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Blog;
 use App\Models\Comment;
+use App\Models\Attachment;
 
 class Post extends Model
 {
@@ -26,5 +27,10 @@ class Post extends Model
     {
         return $this->morphMany(Comment::class, 'commentable')
                     ->withTrashed();
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
     }
 }
