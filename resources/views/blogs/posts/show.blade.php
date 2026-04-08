@@ -25,6 +25,16 @@
 
     <article>{{ $post->content }}</article>
 
+    <ul>
+        @foreach ($post->attachments as $attachment)
+            <li>
+                <a href="{{ $attachment->link->path }}" download="{{ $attachment->original_name }}">
+                    {{ $attachment->original_name }}
+                </a>
+            </li>
+        @endforeach
+    </ul>
+
     <div>
         <form action="{{ route('posts.comments.store', $post) }}" method="POST">
             @csrf

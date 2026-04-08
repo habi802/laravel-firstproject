@@ -98,3 +98,8 @@ Route::resource('blogs.posts', \App\Http\Controllers\PostController::class)->sha
 Route::resource('posts.comments', \App\Http\Controllers\CommentController::class)
      ->shallow()
      ->only(['store', 'update', 'destroy']);
+
+// 파일
+Route::resource('posts.attachments', \App\Http\Controllers\AttachmentController::class)
+     ->shallow()
+     ->only(['store', 'destroy']);

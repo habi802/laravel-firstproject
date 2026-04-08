@@ -38,6 +38,8 @@ class PostController extends Controller
             $request->only(['title', 'content'])
         );
 
+        $this->attachments($request, $post);
+
         return to_route('posts.show', $post);
     }
 
@@ -77,7 +79,16 @@ class PostController extends Controller
             $request->only(['title', 'content'])
         );
 
+        $this->attachments($request, $post);
+
         return to_route('posts.show', $post);
+    }
+
+    private function attachments(Request $request, $post)
+    {
+        if ($request->hasFile('attachments')) {
+            app(AttachmentController::class)->store($request, $post);
+        }
     }
 
     /**
