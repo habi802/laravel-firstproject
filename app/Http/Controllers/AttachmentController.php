@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreAttachmentRequest;
 
 class AttachmentController extends Controller
 {
@@ -26,9 +27,16 @@ class AttachmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAttachmentRequest $request)
     {
-        //
+        foreach ($request->file('attachments') as $attachment) {
+            $attachment->storePublicly('attachments', 'public');
+
+            $post->attachments()->create([
+                'original_name' => $attachment->getClientOriginalName(),
+                'name' => $attachment->hashName('attachments')
+            ]);
+        }
     }
 
     /**
@@ -60,6 +68,8 @@ class AttachmentController extends Controller
      */
     public function destroy(Attachment $attachment)
     {
-        //
+        $attachment->delete();
+
+        return back();
     }
 }
