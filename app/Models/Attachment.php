@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
 //use Illuminate\Database\Eloquent\Casts\Attribute;
-//use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage;
 // use App\Casts\Link;
 use App\Castables\Link;
+use Illuminate\Database\Eloquent\Prunable;
 
 class Attachment extends Model
 {
-    use HasFactory;
+    use HasFactory, Prunable;
 
     protected $fillable = [
         'original_name',
@@ -48,4 +49,14 @@ class Attachment extends Model
     protected $casts = [
         'link' => Link::class
     ];
+
+    public function prunable()
+    {
+        return static::whereNull('post_id');
+    }
+
+    public function pruning()
+    {
+        Storage::disk('public')->delete($this->name);
+    }
 }

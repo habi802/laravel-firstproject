@@ -16,9 +16,9 @@ class Link implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        $path = $this->external($attributes(['name']))
+        $path = $this->external($attributes['name'])
               ? $attributes['name']
-              : Storage::disk('public')->rul($attributes['name']);
+              : Storage::disk('public')->url($attributes['name']);
 
         //return $value ?? $path;
         return new LinkCastable($path);

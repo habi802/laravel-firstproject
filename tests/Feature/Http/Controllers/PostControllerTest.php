@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Blog;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class PostControllerTest extends TestCase
 {
@@ -37,6 +39,10 @@ class PostControllerTest extends TestCase
     // 글쓰기에 관한 검증
     public function testCreatePostForBlog()
     {
+        Storage::fake('public');
+
+        $attachment = UploadedFile::fake()->image('file.jpg');
+
         $blog = Blog::factory()->hasSubscribers()->create();
 
         $data = [
@@ -45,11 +51,23 @@ class PostControllerTest extends TestCase
         ];
 
         $this->actingAs($blog->user)
-             ->post(route('blogs.posts.store', $blog), $data)
+             ->post(route('blogs.posts.store', $blog), [
+                ...$data,
+                'attachments' => [$attachment],
+             ])
              ->assertRedirect();
 
         $this->assertCount(1, $blog->posts);
         $this->assertDatabaseHas('posts', $data);
+
+        $this->assertDatabaseHas('attachments', [
+            'original_name' => $attachment->getClientOriginalName(),
+            'name' => $attachment->hashName('attachments'),
+        ]);
+
+        Storage::disk('public')->assertExists(
+            $attachment->hashName('attachments')
+        );
     }
 
     // 글 조회에 관한 검증
@@ -76,6 +94,10 @@ class PostControllerTest extends TestCase
     // 글 수정에 관한 검증
     public function testUpdatePost()
     {
+        Storage::fake('public');
+
+        $attachment = UploadedFile::fake()->image('file.jpg');
+
         $post = Post::factory()->create();
 
         $data = [
@@ -84,10 +106,22 @@ class PostControllerTest extends TestCase
         ];
 
         $this->actingAs($post->blog->user)
-             ->put(route('posts.update', $post), $data)
+             ->put(route('posts.update', $post), [
+                ...$data,
+                'attachments' => [$attachment],
+             ])
              ->assertRedirect();
 
         $this->assertDatabaseHas('posts', $data);
+
+        $this->assertDatabaseHas('attachments', [
+            'original_name' => $attachment->getClientOriginalName(),
+            'name' => $attachment->hashName('attachments'),
+        ]);
+
+        Storage::disk('public')->assertExists(
+            $attachment->hashName('attachments')
+        );
     }
 
     // 글 삭제에 관한 검증

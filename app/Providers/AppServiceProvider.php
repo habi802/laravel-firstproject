@@ -51,6 +51,6 @@ class AppServiceProvider extends ServiceProvider
         // });
 
         Post::observe(PostObserver::class);
-        Attachment::class(AttachmentObserver::class);
+        //Attachment::class(AttachmentObserver::class);
     }
 }

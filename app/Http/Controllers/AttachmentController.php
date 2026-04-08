@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attachment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAttachmentRequest;
+use App\Models\Post;
 
 class AttachmentController extends Controller
 {
@@ -27,7 +28,7 @@ class AttachmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAttachmentRequest $request)
+    public function store(Request $request, Post $post)
     {
         foreach ($request->file('attachments') as $attachment) {
             $attachment->storePublicly('attachments', 'public');

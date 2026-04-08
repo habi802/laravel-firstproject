@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Attachment;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use App\Models\Post;
 
 class AttachmentPolicy
 {
@@ -27,9 +28,9 @@ class AttachmentPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Post $post): bool
     {
-        return false;
+        return $user->id === $post->blog->user_id;
     }
 
     /**
@@ -45,7 +46,7 @@ class AttachmentPolicy
      */
     public function delete(User $user, Attachment $attachment): bool
     {
-        return false;
+        return $user->id === $attachment->post->blog->user_id;
     }
 
     /**
