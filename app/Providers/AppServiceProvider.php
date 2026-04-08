@@ -12,6 +12,8 @@ use SocialiteProviders\Naver\NaverExtendSocialite;
 // use App\Models\Blog;
 use App\Models\Post;
 use App\Observers\PostObserver;
+use App\Models\Attachment;
+use App\Observers\AttachmentObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,5 +51,6 @@ class AppServiceProvider extends ServiceProvider
         // });
 
         Post::observe(PostObserver::class);
+        Attachment::class(AttachmentObserver::class);
     }
 }
