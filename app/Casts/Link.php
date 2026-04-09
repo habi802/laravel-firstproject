@@ -6,6 +6,7 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Castables\Link as LinkCastable;
+use Exception;
 
 class Link implements CastsAttributes
 {
