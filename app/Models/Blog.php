@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Comment;
+use App\Collections\BlogCollection;
 
 class Blog extends Model
 {
@@ -42,5 +43,10 @@ class Blog extends Model
     {
         return $this->hasManyThrough(Comment::class, Post::class, secondKey: 'commentable_id')
                     ->where('commentable_type', Post::class);
+    }
+
+    public function newCollection(array $models = [])
+    {
+        return new BlogCollection($models);
     }
 }
