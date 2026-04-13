@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Blog;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Subscribed as SubscribedMailable;
 
 class SubscribeControllerTest extends TestCase
 {
@@ -15,6 +17,8 @@ class SubscribeControllerTest extends TestCase
     // 블로그 구독에 대한 검증
     public function testUserSubscribeBlog()
     {
+        Mail::fake();
+
         $user = User::factory()->create();
         $blog = Blog::factory()->create();
 
@@ -28,6 +32,8 @@ class SubscribeControllerTest extends TestCase
             'user_id' => $user->id,
             'blog_id' => $blog->id
         ]);
+
+        Mail::assertQueued(SubscribedMailable::class);
     }
 
     // 블로그 구독 취소에 대한 검증

@@ -27,7 +27,7 @@ class SubscribeController extends Controller
             //     (new SubscribedMailable($user, $blog))->onQueue('emails')
             // );
             ->send(
-                (new SubscribeMailable($user, $blog))->onQueue('emails')
+                (new SubscribedMailable($user, $blog))->onQueue('emails')
             );
 
         return back();
