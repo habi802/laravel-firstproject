@@ -8,7 +8,9 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use App\Mail\Subscribed as SubscribedMailable;
+use App\Notifications\Subscribed as SubscribedNotification;
 
 class SubscribeControllerTest extends TestCase
 {
@@ -17,7 +19,8 @@ class SubscribeControllerTest extends TestCase
     // 블로그 구독에 대한 검증
     public function testUserSubscribeBlog()
     {
-        Mail::fake();
+        //Mail::fake();
+        Notification::fake();
 
         $user = User::factory()->create();
         $blog = Blog::factory()->create();
@@ -33,7 +36,8 @@ class SubscribeControllerTest extends TestCase
             'blog_id' => $blog->id
         ]);
 
-        Mail::assertQueued(SubscribedMailable::class);
+        //Mail::assertQueued(SubscribedMailable::class);
+        Notification::assertSentTo($blog->user, SubscribedNotification::class);
     }
 
     // 블로그 구독 취소에 대한 검증
