@@ -6,6 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\User;
+use App\Models\Blog;
+use Illuminate\Notifications\AnonymousNotifiable;
+use App\Mail\Subscribed as SubscribedMailable;
 
 class Subscribed extends Notification
 {
@@ -32,12 +36,19 @@ class Subscribed extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable)
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        // return (new MailMessage)
+        //     ->line('The introduction to the notification.')
+        //     ->action('Notification Action', url('/'))
+        //     ->line('Thank you for using our application!');
+
+        $address = $notifiable instanceof AnonymousNotifiable
+                 ? $notifiable->routeNotificationFor('mail')
+                 : $notifiable->email;
+
+        return (new SubscribedMailable($this->user, $this->blog))
+              ->to($address);
     }
 
     /**
