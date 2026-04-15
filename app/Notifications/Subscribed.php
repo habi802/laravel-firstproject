@@ -11,7 +11,7 @@ use App\Models\Blog;
 use Illuminate\Notifications\AnonymousNotifiable;
 use App\Mail\Subscribed as SubscribedMailable;
 
-class Subscribed extends Notification
+class Subscribed extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -61,5 +61,17 @@ class Subscribed extends Notification
         return [
             //
         ];
+    }
+
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'emails',
+        ];
+    }
+
+    public function shouldSend($notifiable, $channel)
+    {
+        return true;
     }
 }
