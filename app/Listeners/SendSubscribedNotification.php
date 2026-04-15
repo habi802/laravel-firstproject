@@ -4,9 +4,10 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Notifications\Subscribed;
+use App\Events\Subscribed;
+use App\Notifications\Subscribed as SubscribedNotification;
 
-class SendSubscriptionNotification implements ShouldQueue
+class SendSubscribedNotification implements ShouldQueue
 {
     public $queue = 'listeners';
 
@@ -21,13 +22,8 @@ class SendSubscriptionNotification implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(Subscribed $event): void
     {
-        //
-    }
-
-    public function failed(Subscribed $event, $exceiption)
-    {
-        //
+        $event->blog->user->notify(new SubscribedNotification($event->user, $event->blog));
     }
 }

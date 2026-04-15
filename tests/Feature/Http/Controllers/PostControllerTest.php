@@ -9,6 +9,8 @@ use App\Models\Blog;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
+use App\Events\Published;
 
 class PostControllerTest extends TestCase
 {
@@ -39,6 +41,8 @@ class PostControllerTest extends TestCase
     // 글쓰기에 관한 검증
     public function testCreatePostForBlog()
     {
+        Event::fake();
+
         Storage::fake('public');
 
         $attachment = UploadedFile::fake()->image('file.jpg');
@@ -68,6 +72,8 @@ class PostControllerTest extends TestCase
         Storage::disk('public')->assertExists(
             $attachment->hashName('attachments')
         );
+
+        Event::assertDispatched(Published::class);
     }
 
     // 글 조회에 관한 검증

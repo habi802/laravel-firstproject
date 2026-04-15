@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use App\Mail\Subscribed as SubscribedMailable;
 use App\Notifications\Subscribed as SubscribedNotification;
+use Illuminate\Support\Facades\Event;
+use App\Events\Subscribed;
 
 class SubscribeControllerTest extends TestCase
 {
@@ -20,7 +22,8 @@ class SubscribeControllerTest extends TestCase
     public function testUserSubscribeBlog()
     {
         //Mail::fake();
-        Notification::fake();
+        //Notification::fake();
+        Event::fake();
 
         $user = User::factory()->create();
         $blog = Blog::factory()->create();
@@ -37,7 +40,8 @@ class SubscribeControllerTest extends TestCase
         ]);
 
         //Mail::assertQueued(SubscribedMailable::class);
-        Notification::assertSentTo($blog->user, SubscribedNotification::class);
+        //Notification::assertSentTo($blog->user, SubscribedNotification::class);
+        Event::assertDispatched(Subscribed::class);
     }
 
     // 블로그 구독 취소에 대한 검증

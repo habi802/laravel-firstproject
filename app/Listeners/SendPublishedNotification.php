@@ -8,7 +8,7 @@ use App\Events\Published;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Published as PublishedNotification;
 
-class SendPublishingNotification implements ShouldQueue
+class SendPublishedNotification implements ShouldQueue
 {
     public $queue = 'listeners';
 
