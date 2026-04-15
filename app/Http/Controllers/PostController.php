@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use App\Events\Published;
 
 class PostController extends Controller
 {
@@ -40,6 +41,10 @@ class PostController extends Controller
         );
 
         $this->attachments($request, $post);
+
+        if ($blog->subscribers()->exists()) {
+            event(new Published($blog->subscribers, $post));
+        }
 
         return to_route('posts.show', $post);
     }
