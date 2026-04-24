@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use App\Models\Post;
 
-class Published
+class Published implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -32,7 +32,7 @@ class Published
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel("pub-{$this->post->blog->name}"),
         ];
     }
 }

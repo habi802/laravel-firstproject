@@ -22,5 +22,16 @@
         @endif
 
         <main>@yield('content')</main>
+
+        @auth
+            <script type="module">
+                @foreach (auth()->user()->subscriptions as $blog)
+                        Echo.private('pub-{{ $blog->name }}')
+                            .listen('Published', e => {
+                                    console.log(e.post);
+                            });
+                @endforeach
+            </script>
+        @endauth
     </body>
 </html>
