@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Post;
 use Illuminate\Support\Str;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class Published extends Notification implements ShouldQueue
 {
@@ -60,5 +61,12 @@ class Published extends Notification implements ShouldQueue
         return [
             'broadcast' => 'broadcasts'
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'post' => $this->post
+        ]);
     }
 }

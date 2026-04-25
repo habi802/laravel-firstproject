@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Blog;
 use Illuminate\Notifications\AnonymousNotifiable;
 use App\Mail\Subscribed as SubscribedMailable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class Subscribed extends Notification implements ShouldQueue
 {
@@ -74,5 +75,12 @@ class Subscribed extends Notification implements ShouldQueue
     public function shouldSend($notifiable, $channel)
     {
         return true;
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'user' => $this->user,
+        ]);
     }
 }

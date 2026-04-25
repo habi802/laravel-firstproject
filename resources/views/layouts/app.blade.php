@@ -29,7 +29,12 @@
 
                 Echo.private(`App.Models.User.${id}`)
                     .notification(n => {
-                        console.log(n.post)
+                        switch (n.type) {
+                            case 'App\\Notifications\\Subscribed':
+                                return console.log(n.user);
+                            case 'App\\Notifications\\Published':
+                                return console.log(n.post);
+                        }
                     });
             </script>
         @endauth
