@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use App\Models\Post;
 use Illuminate\Support\Str;
 
-class Published extends Notification
+class Published extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -28,7 +28,7 @@ class Published extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'broadcast'];
     }
 
     /**
@@ -52,6 +52,13 @@ class Published extends Notification
     {
         return [
             //
+        ];
+    }
+
+    public function viaQueues()
+    {
+        return [
+            'broadcast' => 'broadcasts'
         ];
     }
 }

@@ -25,12 +25,12 @@
 
         @auth
             <script type="module">
-                @foreach (auth()->user()->subscriptions as $blog)
-                        Echo.private('pub-{{ $blog->name }}')
-                            .listen('Published', e => {
-                                    console.log(e.post);
-                            });
-                @endforeach
+                const id = "{{ auth()->user()->id }}";
+
+                Echo.private(`App.Models.User.${id}`)
+                    .notification(n => {
+                        console.log(n.post)
+                    });
             </script>
         @endauth
     </body>

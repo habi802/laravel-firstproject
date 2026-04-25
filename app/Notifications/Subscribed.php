@@ -30,7 +30,7 @@ class Subscribed extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'broadcast'];
     }
 
     /**
@@ -67,6 +67,7 @@ class Subscribed extends Notification implements ShouldQueue
     {
         return [
             'mail' => 'emails',
+            'broadcast' => 'broadcasts'
         ];
     }
 
