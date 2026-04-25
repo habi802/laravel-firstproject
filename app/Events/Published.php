@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use App\Models\Post;
 
-class Published implements ShouldBroadcast
+class Published
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
