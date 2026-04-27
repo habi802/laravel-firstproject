@@ -10,6 +10,8 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as ResettablePassword;
 use App\Models\Blog;
 use App\Models\Comment;
+//use App\Models\Scopes\VerifiedScope;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -64,5 +66,15 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new VerifiedScope());
+    // }
+
+    public function scopeVerified(Builder $query, ...$params)
+    {
+        return $query->whereNotNull('email_verified_at');
     }
 }
