@@ -21,7 +21,7 @@ class Locale
     {
         $locale = $this->locale($request);
 
-        if ($reuqest->session()->missing($this->key)) {
+        if ($request->session()->missing($this->key)) {
             $request->session()->put($this->key, $locale);
         }
 
