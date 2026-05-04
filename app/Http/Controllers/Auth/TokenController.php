@@ -23,7 +23,7 @@ class TokenController extends Controller
      */
     public function create()
     {
-        return view('token.create', [
+        return view('tokens.create', [
             'abilities' => Ability::cases()
         ]);
     }
