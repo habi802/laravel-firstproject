@@ -107,3 +107,7 @@ Route::resource('posts.attachments', \App\Http\Controllers\AttachmentController:
 // 검색
 Route::get('/search', \App\Http\Controllers\SearchController::class)
      ->name('search');
+
+// API 토큰
+Route::resource('tokens', \App\Http\Controllers\Auth\TokenController::class)
+     ->only(['create', 'store', 'destroy']);

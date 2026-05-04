@@ -12,11 +12,12 @@ use App\Models\Blog;
 use App\Models\Comment;
 //use App\Models\Scopes\VerifiedScope;
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, ResettablePassword;
+    use HasFactory, Notifiable, ResettablePassword, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
