@@ -13,3 +13,7 @@ Route::get('/subscriptions', \App\Http\Controllers\Dashboard\SubscriptionControl
 // 댓글
 Route::get('/comments', \App\Http\Controllers\Dashboard\CommentController::class)
      ->name('dashboard.comments');
+
+// API 토큰
+Route::get('/tokens', \App\Http\Controllers\Dashboard\TokenController::class)
+     ->name('dashboard.tokens');
