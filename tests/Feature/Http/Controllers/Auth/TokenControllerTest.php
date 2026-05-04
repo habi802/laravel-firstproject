@@ -1,0 +1,68 @@
+<?php
+
+namespace Tests\Feature\Http\Controllers\Auth;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use App\Models\User;
+use App\Enums\Ability;
+
+class TokenControllerTest extends TestCase
+{
+    use RefreshDatabase, WithFaker;
+
+    // 토큰 생성 뷰에 관한 검증
+    public function testReturnsCreateViewForToken()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+             ->get(route('tokens.create'))
+             ->assertOk()
+             ->assertViewIs('tokens.create');
+    }
+
+    // 토큰 생성에 관한 검증
+    public function testCreateToken()
+    {
+        $user = User::factory()->create();
+
+        $abilities = $this->faker->randomElements(
+            collect(Ability::cases())->pluck('value')->toArray()
+        );
+
+        $name = $this->faker->word();
+
+        $this->actingAs($user)
+             ->post(route('tokens.store'), [
+                'name' => $name,
+                'abilities' => $abilities,
+             ])
+             ->assertRedirect();
+
+        $this->assertDatabaseHas('personal_access_tokens', [
+            'name' => $name,
+            'abilities' => json_encode($abilities),
+        ]);
+    }
+
+    // 토큰 삭제에 관한 검증
+    public function testDeleteToken()
+    {
+        $user = User::factory()->create();
+
+        $name = $this->faker->word();
+        $user->createToken($name);
+
+        $token = $user->tokens()->first();
+
+        $this->actingAs($user)
+             ->delete(route('tokens.destroy', $token))
+             ->assertRedirect();
+
+        $this->assertDatabaseMissing('personal_access_tokens', [
+            'name' => $name,
+        ]);
+    }
+}
