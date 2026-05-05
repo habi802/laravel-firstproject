@@ -6,6 +6,7 @@ use App\Models\Attachment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreAttachmentRequest;
 use App\Models\Post;
+use App\Services\AttachmentService;
 
 class AttachmentController extends Controller
 {
@@ -30,14 +31,15 @@ class AttachmentController extends Controller
      */
     public function store(Request $request, Post $post)
     {
-        foreach ($request->file('attachments') as $attachment) {
-            $attachment->storePublicly('attachments', 'public');
+        // foreach ($request->file('attachments') as $attachment) {
+        //     $attachment->storePublicly('attachments', 'public');
 
-            $post->attachments()->create([
-                'original_name' => $attachment->getClientOriginalName(),
-                'name' => $attachment->hashName('attachments')
-            ]);
-        }
+        //     $post->attachments()->create([
+        //         'original_name' => $attachment->getClientOriginalName(),
+        //         'name' => $attachment->hashName('attachments')
+        //     ]);
+        // }
+        $this->attachmentService->store($request->validated(), $post);
     }
 
     /**
@@ -69,7 +71,9 @@ class AttachmentController extends Controller
      */
     public function destroy(Attachment $attachment)
     {
-        $attachment->delete();
+        // $attachment->delete();
+
+        $this->attachmentService->destroy($attachment);
 
         return back();
     }

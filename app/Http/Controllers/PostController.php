@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Events\Published;
+use App\Services\PostService;
 
 class PostController extends Controller
 {
@@ -36,15 +37,17 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request, Blog $blog)
     {
-        $post = $blog->posts()->create(
-            $request->only(['title', 'content'])
-        );
+        // $post = $blog->posts()->create(
+        //     $request->only(['title', 'content'])
+        // );
 
-        $this->attachments($request, $post);
+        // $this->attachments($request, $post);
 
-        if ($blog->subscribers()->exists()) {
-            event(new Published($blog->subscribers, $post));
-        }
+        // if ($blog->subscribers()->exists()) {
+        //     event(new Published($blog->subscribers, $post));
+        // }
+
+        $post = $this->postService->store($request->validated(), $blog);
 
         return to_route('posts.show', $post);
     }
@@ -81,11 +84,13 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        $post->update(
-            $request->only(['title', 'content'])
-        );
+        // $post->update(
+        //     $request->only(['title', 'content'])
+        // );
 
-        $this->attachments($request, $post);
+        // $this->attachments($request, $post);
+
+        $this->postService->update($request->validated(), $post);
 
         return to_route('posts.show', $post);
     }
@@ -102,7 +107,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+        // $post->delete();
+
+        $this->postService->destroy($post);
 
         return to_route('blogs.posts.index', $post->blog);
     }
