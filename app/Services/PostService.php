@@ -26,7 +26,7 @@ class PostService
             $this->attachments($data['attachments'], $post);
         }
 
-        if ($blog->suibscribers()->exists()) {
+        if ($blog->subscribers()->exists()) {
             event(new Published($blog->subscribers, $post));
         }
 
