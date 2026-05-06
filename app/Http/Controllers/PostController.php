@@ -12,6 +12,11 @@ use App\Services\PostService;
 
 class PostController extends Controller
 {
+    public function __construct(private readonly PostService $postService)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      */

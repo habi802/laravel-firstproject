@@ -1,0 +1,153 @@
+<?php
+
+namespace Tests\Feature\Http\Controllers\Api;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+use App\Models\Blog;
+use Laravel\Sanctum\Sanctum;
+use App\Enums\Ability;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Testing\Fluent\AssertableJson;
+use App\Events\Published;
+use App\Models\Post;
+
+class PostControllerTest extends TestCase
+{
+    use RefreshDatabase, WithFaker;
+
+    // 글 목록 조회에 관한 검증
+    public function testRequestListOfPost()
+    {
+        $blog = Blog::factory()->hasPosts(3)->create();
+
+        Sanctum::actingAs($blog->user, [
+            Ability::POST_READ->value,
+        ]);
+
+        $this->getJson(route('api.blogs.posts.index', $blog))
+             ->assertOk();
+    }
+
+    // 글 등록에 관한 검증
+    public function testCreatePostAndReturnsItself()
+    {
+        Event::fake();
+        Storage::fake('public');
+
+        $attachment = UploadedFile::fake()->image('file.jpg');
+
+        $blog = Blog::factory()->hasPosts(3)->hasSubscribers()->create();
+        $data = [
+            'title' => $this->faker->text(50),
+            'content' => $this->faker->text,
+        ];
+
+        Sanctum::actingAs($blog->user, [
+            Ability::POST_CREATE->value,
+        ]);
+
+        $this->postJson(route('api.blogs.posts.store', $blog), [
+            ...$data,
+            'attachments' => [
+                $attachment,
+            ],
+        ])
+        ->assertCreated()
+        ->assertJson(function (AssertableJson $json) use ($data) {
+            //$json->has('data', function (AssertableJson $json) use ($data) {
+                $json->whereAll($data)
+                     ->hasAll(['id', 'title', 'content'])
+                     ->etc();
+            //});
+        });
+
+        $this->assertDatabaseHas('posts', $data);
+
+        $this->assertDatabaseHas('attachments', [
+            'original_name' => $attachment->getClientOriginalName(),
+            'name' => $attachment->hashName('attachments'),
+        ]);
+
+        Storage::disk('public')->assertExists(
+            $attachment->hashName('attachments')
+        );
+
+        Event::assertDispatched(Published::class);
+    }
+
+    // 글 조회에 관한 검증
+    public function testRequestPost()
+    {
+        $post = Post::factory()->create();
+
+        Sanctum::actingAs($post->blog->user, [
+            Ability::POST_READ->value,
+        ]);
+
+        $response = $this->getJson(route('api.posts.show', $post))
+                         ->assertOk()
+                         ->assertJson(function (AssertableJson $json) {
+                            //$json->has('data', function (AssertableJson $json) {
+                                $json->hasAll(['id', 'title', 'content'])
+                                     ->etc();
+                            //});
+                         });
+    }
+
+    // 글 수정에 관한 검증
+    public function testUpdatrePost()
+    {
+        $attachment = UploadedFile::fake()->image('avatar.jpg');
+
+        $post = Post::factory()->create();
+
+        $data = [
+            'title' => $this->faker->text(50),
+            'content' => $this->faker->text,
+        ];
+
+        Sanctum::actingAs($post->blog->user, [
+            Ability::POST_UPDATE->value,
+        ]);
+
+        $this->putJson(route('api.posts.update', $post), [
+            ...$data,
+            'attachments' => [
+                $attachment,
+            ],
+        ])
+        ->assertNoContent();
+
+        $this->assertDatabaseHas('posts', $data);
+
+        $this->assertDatabaseHas('attachments', [
+            'original_name' => $attachment->getClientOriginalName(),
+            'name' => $attachment->hashName('attachments'),
+        ]); 
+
+        Storage::disk('public')->assertExists(
+            $attachment->hashName('attachments')
+        );
+    }
+
+    // 글 삭제에 관한 검증
+    public function testDeletePost()
+    {
+        $post = Post::factory()->create();
+
+        Sanctum::actingAs($post->blog->user, [
+            Ability::POST_DELETE->value,
+        ]);
+
+        $this->deleteJson(route('api.posts.destroy', $post))
+             ->assertNoContent();
+
+        $this->assertDatabaseMissing('posts', [
+            'id' => $post->id,
+        ]);
+    }
+}

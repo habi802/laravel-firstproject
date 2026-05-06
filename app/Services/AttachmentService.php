@@ -7,7 +7,7 @@ use App\Models\Post;
 
 class AttachmentService
 {
-    public function store(array $data, Post $poat)
+    public function store(array $data, Post $post)
     {
         foreach ($data['attachments'] as $attachment) {
             $attachment->storePublicly('attachments', 'public');
