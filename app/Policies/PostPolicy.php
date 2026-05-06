@@ -14,7 +14,8 @@ class PostPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        //return true;
+        return $user->tokenCan('post:read');
     }
 
     /**
@@ -22,7 +23,8 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return true;
+        //return true;
+        return $user->tokenCan('post:read');
     }
 
     /**
@@ -30,7 +32,8 @@ class PostPolicy
      */
     public function create(User $user, Blog $blog): bool
     {
-        return $user->id === $blog->user_id;
+        return $user->id === $blog->user_id
+            && $user->tokenCan('post:create');
     }
 
     /**
@@ -38,7 +41,8 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
-        return $user->id === $post->blog->user_id;
+        return $user->id === $post->blog->user_id
+            && $user->tokenCan('post:update');
     }
 
     /**
@@ -46,7 +50,8 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return $user->id === $post->blog->user_id;
+        return $user->id === $post->blog->user_id
+            && $user->tokenCan('post:delete');
     }
 
     /**
