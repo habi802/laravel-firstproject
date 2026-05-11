@@ -10,6 +10,7 @@ use App\Models\Blog;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\PostCollection;
 
 class PostController extends Controller
 {
@@ -30,11 +31,13 @@ class PostController extends Controller
         $posts = $blog->posts()
                       ->latest()
                       ->get();
+        
+        return new PostCollection($posts);
 
-        return PostResource::collection($posts)
-                           ->additional([
-                                'data' => $this->collection,
-                           ]);
+        // return PostResource::collection($posts)
+        //                    ->additional([
+        //                         'count' => $posts->count(),
+        //                    ]);
     }
 
     /**

@@ -29,7 +29,13 @@ class PostControllerTest extends TestCase
         ]);
 
         $this->getJson(route('api.blogs.posts.index', $blog))
-             ->assertOk();
+             ->assertOk()
+             ->assertJson(function (AssertableJson $json) {
+                $json->whereType('data', 'array')
+                     ->has('data', 3, function (AssertableJson $json) {
+                        $json->hasAll(['id', 'title', 'content'])->etc();
+                     });
+             });
     }
 
     // 글 등록에 관한 검증
@@ -58,11 +64,11 @@ class PostControllerTest extends TestCase
         ])
         ->assertCreated()
         ->assertJson(function (AssertableJson $json) use ($data) {
-            //$json->has('data', function (AssertableJson $json) use ($data) {
+            $json->has('data', function (AssertableJson $json) use ($data) {
                 $json->whereAll($data)
                      ->hasAll(['id', 'title', 'content'])
                      ->etc();
-            //});
+            });
         });
 
         $this->assertDatabaseHas('posts', $data);
@@ -91,10 +97,10 @@ class PostControllerTest extends TestCase
         $response = $this->getJson(route('api.posts.show', $post))
                          ->assertOk()
                          ->assertJson(function (AssertableJson $json) {
-                            //$json->has('data', function (AssertableJson $json) {
+                            $json->has('data', function (AssertableJson $json) {
                                 $json->hasAll(['id', 'title', 'content'])
                                      ->etc();
-                            //});
+                            });
                          });
     }
 
