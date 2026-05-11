@@ -9,6 +9,7 @@ use App\Services\PostService;
 use App\Models\Blog;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 
 class PostController extends Controller
 {
@@ -22,9 +23,15 @@ class PostController extends Controller
      */
     public function index(Blog $blog)
     {
-        return $blog->posts()
-                    ->latest()
-                    ->paginate(5);
+        // return $blog->posts()
+        //             ->latest()
+        //             ->paginate(5);
+
+        $posts = $blog->posts()
+                      ->latest()
+                      ->get();
+
+        return PostResource::collection($posts);
     }
 
     /**
@@ -34,7 +41,10 @@ class PostController extends Controller
     {
         $post = $this->postService->store($request->validated(), $blog);
 
-        return response()->json($post, 201);
+        //return response()->json($post, 201);
+        return (new PostResource($post))
+             ->response()
+             ->setStatusCode(201);
     }
 
     /**
@@ -42,7 +52,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return $post;
+        //return $post;
+        return new PostResource($post);
     }
 
     /**
