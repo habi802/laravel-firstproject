@@ -16,7 +16,7 @@ class PostController extends Controller
 {
     public function __construct(private readonly PostService $postService)
     {
-        $this->middleware('cache.headers:public;max_age=2628000;etag');
+        //
     }
 
     /**
