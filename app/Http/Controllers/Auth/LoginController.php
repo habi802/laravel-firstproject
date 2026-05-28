@@ -25,6 +25,10 @@ class LoginController extends Controller
             ]);
         }
 
+        if ($request->ajax()) {
+            return response()->json('', 200);
+        }
+
         // 로그인 성공 시 사용자가 원래 접속하려던 페이지로 다시 돌아가게 함
         return redirect()->intended();
     }
