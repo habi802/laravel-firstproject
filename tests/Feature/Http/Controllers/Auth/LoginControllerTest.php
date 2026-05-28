@@ -33,6 +33,22 @@ class LoginControllerTest extends TestCase
         $this->assertAuthenticated();
     }
 
+    // 로그인 API 요청 관련 검증
+    public function testAjaxLoginForValidCredentials()
+    {
+        $user = User::factory()->create();
+
+        $this->postJson(route('login'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest',
+        ])
+        ->assertOk();
+
+        $this->assertAuthenticated();
+    }
+
     // 로그인 실패 시 로그인이 되지 않음을 검증하고, 이후 응답이 리다이렉트를 포함하는지, failed를 세션 에러로 가지고 있는지 검증
     public function testFailToLoginForInvalidCredentials()
     {
