@@ -13,8 +13,9 @@ use App\Models\Comment;
 //use App\Models\Scopes\VerifiedScope;
 use Illuminate\Database\Eloquent\Builder;
 use Laravel\Sanctum\HasApiTokens;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
+class User extends Authenticatable implements MustVerifyEmail, CanResetPassword, JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, ResettablePassword, HasApiTokens;
@@ -77,5 +78,15 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     public function scopeVerified(Builder $query, ...$params)
     {
         return $query->whereNotNull('email_verified_at');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
