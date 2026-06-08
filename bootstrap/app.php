@@ -24,10 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'locale' => \App\Http\Middleware\Locale::class,
         ]);
 
-        $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'auth:sanctum',
-        ]);
+        // $middleware->api(prepend: [
+        //     \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        //     'auth:sanctum',
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
